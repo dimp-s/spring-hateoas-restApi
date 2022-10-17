@@ -6,13 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-//for hateaos
-import org.springframework.hateoas.RepresentationModel;
+
+//hateoas done through assembler entity model class
 
 //use hateos using RepresentationModel
 @Entity
 @Table(name = "accounts")
-public class Account extends RepresentationModel<Account>{
+public class Account {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

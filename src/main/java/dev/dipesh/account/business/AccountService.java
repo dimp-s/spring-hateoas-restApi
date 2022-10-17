@@ -25,7 +25,7 @@ public class AccountService {
         return accountRepository.findAll();
     }
 
-    public Account geAccountById(Integer id){
+    public Account getAccountById(Integer id){
         return accountRepository.findById(id).get();
     }
 
