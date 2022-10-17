@@ -2,6 +2,7 @@ package dev.dipesh.account.business;
 
 import java.util.List;
 
+import javax.security.auth.login.AccountNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -42,7 +43,9 @@ public class AccountService {
         return accountRepository.findById(id).get();
     }
 
-    public void deleteAccount(Integer id) {
+    public void deleteAccount(Integer id) throws AccountNotFoundException{
+        if(!accountRepository.existsById(id))
+            throw new AccountNotFoundException();
         accountRepository.deleteById(id);
     }
 

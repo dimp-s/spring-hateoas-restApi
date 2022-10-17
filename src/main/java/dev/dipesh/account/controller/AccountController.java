@@ -3,10 +3,13 @@ package dev.dipesh.account.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import javax.security.auth.login.AccountNotFoundException;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -148,6 +151,17 @@ public class AccountController {
         updatedAccount.add(linkTo(methodOn(AccountController.class).withdraw(updatedAccount.getId(),null)).withRel("withdraw"));
 
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable("id") Integer id) {
+        try{
+            accountService.deleteAccount(id);
+            return ResponseEntity.noContent().build();
+        }catch(AccountNotFoundException ex){
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
 }
