@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
+//for hateaos
 import org.springframework.hateoas.RepresentationModel;
 
 //use hateos using RepresentationModel

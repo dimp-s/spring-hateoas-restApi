@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +39,7 @@ public class AccountApi {
             return ResponseEntity.noContent().build();
         }
 
-        //for each individual account in collection
+        //for each individual account in listAccounts collection create links
         for(Account account : listAccounts){
             //hateos Representation (ControllerClass, method) generates links for self relation
             account.add(linkTo(methodOn(AccountApi.class).getAccountById(account.getId())).withSelfRel());
@@ -67,5 +70,32 @@ public class AccountApi {
             return ResponseEntity.notFound().build();
         }
     } 
+
+    @PostMapping
+    public ResponseEntity<Account> addAccount(@RequestBody Account account){
+        Account savedAccount = accountService.addAccount(account);
+
+        //hateos Representation (ControllerClass, method) generates links for self relation
+        savedAccount.add(linkTo(methodOn(AccountApi.class).getAccountById(account.getId())).withSelfRel());
+        //generates collection relation links
+        savedAccount.add(linkTo(methodOn(AccountApi.class).getAllAccounts()).withRel(IanaLinkRelations.COLLECTION));
+
+        //??not sure maybe puts header link reference to loaction wrt id
+        return ResponseEntity.created(linkTo(methodOn(AccountApi.class)
+        .getAccountById(savedAccount.getId()))
+        .toUri())
+        .body(savedAccount);
+    }
+
+    @PutMapping
+    public ResponseEntity<Account> updateAccount(@RequestBody Account account){
+        Account updatedAccount = accountService.addAccount(account);
+         //hateos Representation (ControllerClass, method) generates links for self relation
+        updatedAccount.add(linkTo(methodOn(AccountApi.class).getAccountById(account.getId())).withSelfRel());
+         //generates collection relation links
+        updatedAccount.add(linkTo(methodOn(AccountApi.class).getAllAccounts()).withRel(IanaLinkRelations.COLLECTION));
+
+        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+    }
 
 }
